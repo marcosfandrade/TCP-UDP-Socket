@@ -1,22 +1,20 @@
 import socket
 
-class TCPClient:
-    def __init__(self, address, port):
-        self.address = address
-        self.port = port
-        
-        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect((self.address, self.port))
-        
-        print(f"Conectando ao servidor {self.address} na porta {self.port}")
-        
-    def send_receive(self, message):
-        try:
-            self.client_socket.sendall(message.encode())
-            
-            data = self.client_socket.recv(1024)
-            print(f"Recebido do servidor: {data.decode()}")
-            
-        finally:
-            print("Fechando conexão com o servidor")
-            self.client_socket.close()
+# cria um socket TCP
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# conecta ao servidor
+server_address = ('localhost', 10000)
+sock.connect(server_address)
+
+# envia dados para o servidor
+message = 'Hello, server!'
+sock.sendall(message.encode())
+
+# espera a resposta do servidor
+data = sock.recv(4096)
+
+print('Dados recebidos: %s' % data.decode())
+
+# fecha o socket
+sock.close()
